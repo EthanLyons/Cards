@@ -3,6 +3,7 @@ package edu.cnm.deepdive;
 import edu.cnm.deepdive.Deck.DeckEmptyException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -24,6 +25,8 @@ public class RecycleWar extends SimpleWar {
     } catch (DeckEmptyException e) {
       // Do nothing.
     }
+    System.out.println(pile1);
+    System.out.println(pile2);
   }
 
   @Override
@@ -36,27 +39,27 @@ public class RecycleWar extends SimpleWar {
       try {
         card1 = pile1.remove(0);
       } catch (IndexOutOfBoundsException e) {
-        if (card1 == null) {
-          // Do nothing until we see what happens with card2.
-        }
+        // Do nothing until we see what happens with card2.
       }
       try {
         card2 = pile2.remove(0);
       } catch (IndexOutOfBoundsException e) {
+        // Do nothing until we see what happens with card2.
       }
-        if (card2 == null) {
-          if (card1 == null) {
-            warPile.add(card1);
-            pile1.addAll(warPile);
-            throw new GameOverException();
-          }
-        } else if (card1 == null) {
-          warPile.add(card2);
-          pile2.addAll(warPile);
+      if (card2 == null) {
+        if (card1 != null) {
+          warPile.add(card1);
+          pile1.addAll(warPile);
           throw new GameOverException();
         }
+      } else if (card1 == null) {
+        warPile.add(card2);
+        pile2.addAll(warPile);
+        throw new GameOverException();
+      }
       warPile.add(card1);
       warPile.add(card2);
+      System.out.printf("%s : %s%n", card1, card2);
       int comparison = getReferree().compare(card1, card2);
       if (comparison == 0) {
         tied = true;
@@ -81,27 +84,27 @@ public class RecycleWar extends SimpleWar {
   public static void main(String[] args) {
     RecycleWar war = new RecycleWar(new SecureRandom());
     try {
-      while (true)  {
+      while (true) {
         war.play();
       }
     } catch (GameOverException e) {
-      //Do nothing
-      e.printStackTrace();
+      // Do nothing
     } finally {
       war.setTally1(war.pile1.size());
       war.setTally2(war.pile2.size());
-      if (war.getTally1() > war.getTally2())
-        ;
-      System.out.println("Player 1 wins!");
-    } else if  {
-      System.out.println("Player 2 wins");
-    } else  {
-      System.out.println("Tie");
+      System.out.printf("Player 1: %d. Player 2: %d.%n", war.getTally1(), war.getTally2());
+      if (war.getTally1() > war.getTally2()) {
+        System.out.println("Player 1 wins!");
+      } else if (war.getTally1() < war.getTally2()) {
+        System.out.println("Player 2 wins!");
+      } else {
+        System.out.println("Tie!");
+      }
     }
   }
 
-
-  private static class GameOverException extends RuntimeException  {
+  private static class GameOverException extends RuntimeException {
 
   }
+
 }

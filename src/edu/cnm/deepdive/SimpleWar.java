@@ -1,6 +1,5 @@
 package edu.cnm.deepdive;
 
-import edu.cnm.deepdive.RecycleWar.GameOverException;
 import java.security.SecureRandom;
 import java.util.Comparator;
 import java.util.Random;
@@ -20,7 +19,7 @@ public class SimpleWar {
     referree = new Referree();
   }
 
-  public void play() throws GameOverException {
+  public void play()  {
     boolean tied;
     int pairsDealt = 0;
     do {
